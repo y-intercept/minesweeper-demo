@@ -2,4 +2,4 @@
 
 ###Bootstrapped with create-react-app
 
-### play at minesweeper-demo.surge.sh
+### play at http://www.minesweeper-demo.surge.sh
