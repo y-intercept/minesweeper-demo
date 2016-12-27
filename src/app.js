@@ -179,7 +179,8 @@ const App = React.createClass({
     const tr = (row, i) => <tr key={i}>{mapIndex(td, row)}</tr>
     const gameState = this.state.game ? null : <span>GAME OVER</span>
     return (
-      <div className="main">
+      <div>
+      <div className="main" id="bg">
         <h2>Minesweeper</h2>
         <select onChange={this.changeSettings}>
           <option value='easy'>Easy</option>
@@ -197,6 +198,7 @@ const App = React.createClass({
           </tbody>
         </table>
       </div>
+    </div>
     )
   }
 })

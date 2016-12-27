@@ -1,6 +1,8 @@
 .main {
-  height: 300px;
-  width: 70%;
+  height: 100%;
+  width: auto;
   margin: 10px auto;
   position: relative;
+  margin-left: 125px;
+  margin-right: 100px;
 }
