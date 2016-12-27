@@ -139,6 +139,12 @@ const App = React.createClass({
             text: '🚩'
           }
         }
+        if (cell.flag === 2) {
+          return {
+            css: closedCss,
+            text: '❓'
+          }
+        }
         if (cell.state === 0) {
           return {
             css: closedCss,
@@ -187,7 +193,7 @@ const App = React.createClass({
           <option value='normal'>Normal</option>
           <option value='hard'>Hard</option>
         </select>
-        <span className="ph2"><button onClick={reload}>Reset</button></span>
+        <span className="ph2"><button className="br2" onClick={reload}>Reset</button></span>
         <span className="red f3 ml3">{gameState}</span>
         <div className='timer'>
           <p>Time: {this.state.timer}</p>
