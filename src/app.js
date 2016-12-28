@@ -40,9 +40,10 @@ const App = React.createClass({
       intervalId: this.startTimer(),
       timer: 0,
       game: true,
+      victory: false,
       settings: {
-        rowDimensions: 9,
-        colDimensions: 9,
+        rows: 9,
+        cols: 9,
         mines: 10
       }
     }
@@ -57,8 +58,8 @@ const App = React.createClass({
   },
   getNewBoard() {
     let mineArray = minesweeper.generateMineArray({
-      rows: this.state.settings.rowDimensions,
-      cols: this.state.settings.colDimensions,
+      rows: this.state.settings.rows,
+      cols: this.state.settings.cols,
       mines: this.state.settings.mines
     })
     return new minesweeper.Board(mineArray)
@@ -85,48 +86,45 @@ const App = React.createClass({
     }
   },
   changeSettings(e) {
-    let difficulty = e.target.value
-    if (difficulty === 'easy') {
-      this.setState({
-        settings: {
-          rowDimensions: 9,
-          colDimensions: 9,
-          mines: 10 }
-      }, function () {
-        this.componentDidMount()
-      })
+    let settings = e.target.value
+    if (settings === 'easy') {
+      settings = {
+          rows: 9,
+          cols: 9,
+          mines: 10
+      }
+    } else if (settings === 'normal') {
+      settings = {
+          rows: 16,
+          cols: 16,
+          mines: 40
+      }
+    } else if (settings === 'hard') {
+      settings = {
+          rows: 16,
+          cols: 30,
+          mines: 99
+      }
     }
-    if (difficulty === 'normal') {
-      this.setState({ settings: {
-        rowDimensions: 16,
-        colDimensions: 16,
-        mines: 40 }
-      }, function () {
-        this.componentDidMount()
-      })
-    }
-    if (difficulty === 'hard') {
-      this.setState({ settings: {
-        rowDimensions: 16,
-        colDimensions: 30,
-        mines: 99 }
-      }, function () {
-        this.componentDidMount()
-      })
-    }
+    let change = minesweeper.generateMineArray(settings)
+    let board = new minesweeper.Board(change)
+    this.setState({
+      board: board,
+      grid: board.grid(),
+      state: board.state()
+    })
   },
   startTimer() {
     return setInterval(_ => {
       let timer = this.state.timer
-      let boardState = this.state.board ? this.state.board.state() : null
-      if (boardState === BoardStateEnum.LOST) {
+      if (this.state.state === BoardStateEnum.LOST) {
         this.setState({timer: 0, game: false})
       }
-      if (boardState === BoardStateEnum.IN_PROGRESS) {
+      if (this.state.state === BoardStateEnum.IN_PROGRESS) {
         this.setState({timer: timer + 1})
       }
-      if (boardState === BoardStateEnum.WON) {
-        this.setState({timer: timer})
+      if (this.state.state === BoardStateEnum.WON) {
+        this.setState({timer: timer, game: false, victory: true})
       }
     }, 1000)
   },
@@ -183,7 +181,7 @@ const App = React.createClass({
     }
 
     const tr = (row, i) => <tr key={i}>{mapIndex(td, row)}</tr>
-    const gameState = this.state.game ? null : <span>GAME OVER</span>
+    const gameState = !this.state.game && this.state.victory ? <span className="green f3 ml3">YOU WON! VICTORY!</span> : null
     return (
       <div>
       <div className="main" id="bg">
@@ -194,7 +192,7 @@ const App = React.createClass({
           <option value='hard'>Hard</option>
         </select>
         <span className="ph2"><button className="br2" onClick={reload}>Reset</button></span>
-        <span className="red f3 ml3">{gameState}</span>
+        <span >{gameState}</span>
         <div className='timer'>
           <p>Time: {this.state.timer}</p>
         </div>

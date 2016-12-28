@@ -1,5 +1,5 @@
 ## Minesweeper created with React
 
-###Bootstrapped with create-react-app
+###using create-react-app and npm minesweeper engine (credit @binaryluke)
 
 ### play at http://www.minesweeper-demo.surge.sh
